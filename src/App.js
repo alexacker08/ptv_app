@@ -44,37 +44,48 @@ class App extends Component {
   }
 
   render() {
+    const trains = this.state.routes
     return (
       <Router>
         <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to React</h1>
+          <header>
+            <h1>This is your train app. Welcome</h1>
           </header>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-          {
-            this.state.routes.map((route) => {
-              let {route_name,route_type, route_id} = route
-              if(route_type === 0){
-                return  <Trains route={route} />
-              }
-            })
-          }
+          <Route exact path="/" render={(props) => (
+            <HomeView routes={trains} />
+          )} />
           <Route path={"/:trainline"} component={LineInformation} />
         </div>
-
       </Router>
     );
   }
 }
 
+function HomeView(props){
+  return (
+    <TrainList trains={props.routes} />
+  )
+}
+
+function TrainList(props){
+  const {trains} = props
+  return (
+    <div className="train-list">
+      {
+        trains.map((train) => {
+          return <Trains route={train} key={train.route_id} />
+        })
+      }
+    </div>
+  )
+}
+
+
 function Trains(props){
   return (
-        <Link to={props.route.route_name} key={props.route.route_id}>
-          <p>{props.route.route_name}</p>
-        </Link>
+    <Link to={props.route.route_name}>
+      <p>{props.route.route_name}</p>
+    </Link>
   )
 }
 
