@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import fetchInformation from './helpers/api';
 
 
 class LineInformation extends Component {
@@ -6,13 +7,19 @@ class LineInformation extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			route: null
+			stops: null
 		}
 	}
 
 	componentDidMount(){
-		const {trainline} = this.props.match.params
-		this.setState({route:trainline})
+		const {routeid} = this.props.match.params
+		this.getRouteInfo(routeid)
+	}
+	getRouteInfo(id){
+		const baseSearch = `/v3/stops/route/${id}/route_type/0`;
+		fetchInformation(baseSearch).then((data) => {
+			this.setState({stops:data.stops})
+		})
 	}
 
 	render(){
