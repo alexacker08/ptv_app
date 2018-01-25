@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  padding-bottom: 60px;
 }
 
 .App-logo {
@@ -22,7 +23,45 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+a {
+  display: block;
+}
+
+.train-timer-holder {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+}
+.train-time-holder:after {
+  clear: both;
+  display: table;
+  content:'';
+}
+
+.train-times {
+  float: left;
+  width: 50%;
+  text-align: center;
+}
+
+.row {
+  max-width: 70em;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.train-listing {
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  border: 1px solid #ccc;
+}
+.train-listing p {
+  margin-bottom: 0px;
+}
+
+.train-listing:nth-of-type(odd){
+  background-color: #ccc;
 }
