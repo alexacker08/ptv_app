@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
-import {Loader} from 'react-loader';
 import Navbar from './components/NavBar.js';
 import logo from './logo.svg';
 import './App.css';
+import {createLocal} from './helpers/localapi.js';
 import LineInformation from './LineInformation';
-import fetchInformation from './helpers/api';
 import RunInformation from './RunInformation';
 import TrainList from './components/TrainList';
+import SearchInput from './components/SearchInput';
 
 class App extends Component {
 
@@ -15,19 +15,37 @@ class App extends Component {
     super()
   }
 
+  componentWillMount(){
+    createLocal();
+  }
+
   render() {
     return (
       <Router>
         <div className="App">
-          <Navbar />
-          <header>
-            <h1>This is your train app. Welcome</h1>
-          </header>
-          <Switch>
-            <Route exact path="/" component={TrainList} />
-            <Route path={"/route_id/:routeid"} component={LineInformation} />
-            <Route path={"/departures/:routeid/:stopid"} component={RunInformation} />
-          </Switch>
+          <div className="left-nav-column">
+            <Navbar />
+          </div>
+          <div className="right-app-content">
+            <div className="buffer"></div>
+            <div className="top-nav-container">
+              <div className="row">
+                <div className="columns medium-12">
+                  <div className="search-container float-right clearfix">
+                    <SearchInput/>
+                  </div>
+                </div>                
+              </div>
+            </div>
+            <Switch>
+              <Route exact path="/" component={TrainList} />
+              <Route path={"/route_id/:routeid"} component={LineInformation} />
+              <Route path={"/departures/:routeid/:stopid"} component={RunInformation} />
+              <Route exact path={"/all-trains"} component={TrainList} />
+            </Switch>
+            <footer>              
+            </footer>            
+          </div>          
         </div>
       </Router>
     );

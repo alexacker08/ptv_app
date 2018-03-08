@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import fetchInformation from './helpers/api';
 import { Link } from 'react-router-dom';
+import Loader from 'react-loader';
 
 class LineInformation extends Component {
 
@@ -8,7 +9,8 @@ class LineInformation extends Component {
 		super(props)
 		this.state = {
 			stops: [],
-			trainName: ''
+			trainName: '',
+			fetching: true
 		}
 	}
 
@@ -21,7 +23,7 @@ class LineInformation extends Component {
 		const baseSearch = `/v3/stops/route/${id}/route_type/0`;
 		fetchInformation(baseSearch).then((data) => {
 			console.log(data)
-			this.setState({stops:data.stops})
+			this.setState({stops:data.stops,fetching:false})
 		}).then(() => {
 			this.getRouteInfo(id)
 		})
@@ -39,16 +41,26 @@ class LineInformation extends Component {
 		const {routeid} = this.props.match.params
 		return (
 			<div className="stop-list">
-				<h1>{this.state.trainName}</h1>
+				<Loader loaded={!this.state.fetching} top="300px" left="50%"></Loader>
+				<div className="row shorten">
+					<div className="columns medium-12">
+						<h1>{this.state.trainName}</h1>
+					</div>
+				</div>
+				<div className="row shorten">
 				{
 					stops.map((stop) => (
-						<Link to={`/departures/${routeid}/${stop.stop_id}`} key={stop.stop_id} route={routeid}>
-							{stop.stop_name}
-						</Link>
+						<div className="columns medium-3 text-center">
+							<Link to={`/departures/${routeid}/${stop.stop_id}`} key={stop.stop_id} route={routeid}>
+								<div className="train-route">
+									<span>{stop.stop_name}</span>
+								</div>								
+							</Link>
+						</div>
 					))		
 				}
+				</div>
 			</div>
-			
 		)
 	}
 }

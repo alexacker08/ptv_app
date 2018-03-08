@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import fetchInformation from './helpers/api';
+import Loader from 'react-loader';
 
 
 class RunInformation extends Component {
@@ -8,6 +9,7 @@ class RunInformation extends Component {
 		super(props)
 		this.state = {
 			next: {},
+			fetching: true
 		}
 		this.getDepatureInfo.bind(this)
 	}
@@ -38,7 +40,6 @@ class RunInformation extends Component {
 			});
 
 			const nextTen = depTimes.slice(0,10);
-			
 
 			fetchInformation(dirSearch).then((data) => {
 				//Build new dest object that will be added to state
@@ -66,7 +67,7 @@ class RunInformation extends Component {
 					}
 				})
 				//Sets the state with new destination and next times Object
-				this.setState({next:destObj})				
+				this.setState({next:destObj,fetching:false})				
 			}).catch(err => console.warn(err))
 		}).catch(err => console.warn(err))
 	}
@@ -76,12 +77,19 @@ class RunInformation extends Component {
 		const {next} = this.state
 		return (
 			<div className="train-timer-holder">
-				<h2>The Next 5 Departures</h2>
-				{
-					nextTimes.map((id) => {
-						return <TrainTimes key={id} direction={next[id].name} times={next[id].next} />					
-					})
-				}
+				<Loader loaded={!this.state.fetching} top="300px" left="50%"></Loader>
+				<div className="row shorten	">
+					<div className="columns medium-12">
+						<h1 className="text-left">Upcoming Departures</h1>
+					</div>
+				</div>
+				<div className="row shorten">
+					{
+						nextTimes.map((id) => {
+							return <TrainTimes key={id} direction={next[id].name} times={next[id].next} />					
+						})
+					}
+				</div>
 			</div>		
 		)
 	}
@@ -89,8 +97,8 @@ class RunInformation extends Component {
 
 function TrainTimes(props){
 	return (
-		<div className="train-times">
-			<h3>{props.direction}</h3>
+		<div className="columns medium-6 train-times">
+			<h3><em>Towards</em> {props.direction}</h3>
 			{
 				props.times.map((time) => {
 					return <p key={time}>{time} minutes until departure</p>
